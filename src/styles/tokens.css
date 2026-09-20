@@ -89,33 +89,9 @@
   /* collapse/expand panels */
 }
 
-/* Dark theme: follows the OS preference by default, and is overridden
- * explicitly once the visitor picks a theme via the header toggle (which
- * sets data-theme and persists it to localStorage). */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-
-    --color-bg: #0f0f13;
-    --color-footer-bg: #000000;
-    --color-footer-text: #ffffff;
-    --color-placeholder: #26262e;
-
-    --color-ink: #f4f3f7;
-    --color-body: #c1c1cb;
-    --color-meta-strong: #d7d6de;
-    --color-meta-soft: #9c9ba6;
-
-    --color-primary: #b57fe6;
-    --color-primary-soft: #d3aef2;
-    --color-linkedin: #0a66c2;
-    --color-github: #e6e6ea;
-    --color-mail: #ea4335;
-
-    --badge-lighten: 42%;
-  }
-}
-
+/* Dark theme only activates when the visitor explicitly picks it via the
+ * header toggle (which sets data-theme and persists it to localStorage) —
+ * light is always the default on first visit, regardless of OS preference. */
 :root[data-theme="dark"] {
   color-scheme: dark;
 

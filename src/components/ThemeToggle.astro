@@ -61,15 +61,6 @@ import { ui } from "../i18n/ui";
   const LANG_STORAGE_KEY = "lang";
   const root = document.documentElement;
   const button = document.querySelector<HTMLButtonElement>("#theme-toggle");
-  const media = window.matchMedia("(prefers-color-scheme: dark)");
-
-  const getStoredTheme = () => {
-    try {
-      return localStorage.getItem(STORAGE_KEY);
-    } catch {
-      return null;
-    }
-  };
 
   const getStoredLang = (): Lang => {
     try {
@@ -79,8 +70,9 @@ import { ui } from "../i18n/ui";
     }
   };
 
-  const resolveTheme = () =>
-    root.dataset.theme ?? (media.matches ? "dark" : "light");
+  // Light is always the default until the visitor explicitly toggles —
+  // system color-scheme preference is intentionally not consulted here.
+  const resolveTheme = () => root.dataset.theme ?? "light";
 
   const syncButton = (lang: Lang = getStoredLang()) => {
     const isDark = resolveTheme() === "dark";
@@ -101,10 +93,6 @@ import { ui } from "../i18n/ui";
       // this page view, it just won't be remembered next visit.
     }
     syncButton();
-  });
-
-  media.addEventListener("change", () => {
-    if (!getStoredTheme()) syncButton();
   });
 
   document.addEventListener("app:langchange", (event) => {
