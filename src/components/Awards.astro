@@ -248,11 +248,18 @@ import { ui } from "../i18n/ui";
       color var(--transition-hover);
   }
 
-  .awards__media:hover .awards__expand,
   .awards__media:focus-visible .awards__expand {
     transform: scale(1.08);
     background: var(--color-primary);
     color: var(--color-bg);
+  }
+
+  @media (hover: hover) {
+    .awards__media:hover .awards__expand {
+      transform: scale(1.08);
+      background: var(--color-primary);
+      color: var(--color-bg);
+    }
   }
 
   @media (max-width: 48rem) {

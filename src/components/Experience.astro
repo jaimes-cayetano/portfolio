@@ -274,9 +274,14 @@ const VISIBLE_COUNT = 3;
     font-size: var(--fs-body);
   }
 
-  .experience__toggle:hover,
   .experience__toggle:focus-visible {
     color: var(--color-primary-soft);
+  }
+
+  @media (hover: hover) {
+    .experience__toggle:hover {
+      color: var(--color-primary-soft);
+    }
   }
 
   .experience__toggle :global(.experience__toggle-icon) {

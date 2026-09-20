@@ -160,7 +160,6 @@ const LOGO_WIDTH = 72;
     border-bottom: 1px solid transparent;
   }
 
-  .education__link:hover,
   .education__link:focus-visible {
     border-bottom-color: var(--color-primary);
   }
@@ -169,9 +168,18 @@ const LOGO_WIDTH = 72;
     transition: transform var(--transition-hover);
   }
 
-  .education__link:hover :global(.education__link-icon),
   .education__link:focus-visible :global(.education__link-icon) {
     transform: translateX(2px);
+  }
+
+  @media (hover: hover) {
+    .education__link:hover {
+      border-bottom-color: var(--color-primary);
+    }
+
+    .education__link:hover :global(.education__link-icon) {
+      transform: translateX(2px);
+    }
   }
 
   .education__logo-slot {

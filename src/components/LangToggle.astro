@@ -29,9 +29,14 @@ import { ui } from "../i18n/ui";
     letter-spacing: 0.02em;
   }
 
-  .lang-toggle:hover,
   .lang-toggle:focus-visible {
     background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+
+  @media (hover: hover) {
+    .lang-toggle:hover {
+      background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    }
   }
 </style>
 

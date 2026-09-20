@@ -122,9 +122,14 @@ import { ui } from "../i18n/ui";
     border-radius: 50%;
   }
 
-  .lightbox__close:hover,
   .lightbox__close:focus-visible {
     background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+
+  @media (hover: hover) {
+    .lightbox__close:hover {
+      background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    }
   }
 
   .lightbox__viewer {
@@ -217,11 +222,18 @@ import { ui } from "../i18n/ui";
       color var(--transition-hover);
   }
 
-  .lightbox__nav:hover,
   .lightbox__nav:focus-visible {
     background: var(--color-primary);
     color: var(--color-bg);
     transform: translateY(-50%) scale(1.08);
+  }
+
+  @media (hover: hover) {
+    .lightbox__nav:hover {
+      background: var(--color-primary);
+      color: var(--color-bg);
+      transform: translateY(-50%) scale(1.08);
+    }
   }
 
   .lightbox__nav[hidden] {
@@ -263,9 +275,14 @@ import { ui } from "../i18n/ui";
       transform var(--transition-hover);
   }
 
-  .lightbox__dots :global(.lightbox__dot:hover),
   .lightbox__dots :global(.lightbox__dot:focus-visible) {
     background: color-mix(in srgb, var(--color-primary) 60%, transparent);
+  }
+
+  @media (hover: hover) {
+    .lightbox__dots :global(.lightbox__dot:hover) {
+      background: color-mix(in srgb, var(--color-primary) 60%, transparent);
+    }
   }
 
   .lightbox__dots :global(.lightbox__dot[aria-current="true"]) {

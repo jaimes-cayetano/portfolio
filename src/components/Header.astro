@@ -173,10 +173,15 @@ import { ui } from "../i18n/ui";
     transition: transform var(--transition-hover);
   }
 
-  .header__link:hover::after,
   .header__link:focus-visible::after,
   .header__link[aria-current="page"]::after {
     transform: scaleX(1);
+  }
+
+  @media (hover: hover) {
+    .header__link:hover::after {
+      transform: scaleX(1);
+    }
   }
 
   .header__link[aria-current="page"] {

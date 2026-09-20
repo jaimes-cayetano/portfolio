@@ -29,9 +29,14 @@ import { ui } from "../i18n/ui";
     color: var(--color-ink);
   }
 
-  .theme-toggle:hover,
   .theme-toggle:focus-visible {
     background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+
+  @media (hover: hover) {
+    .theme-toggle:hover {
+      background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    }
   }
 
   .theme-toggle :global(.theme-toggle__icon) {
