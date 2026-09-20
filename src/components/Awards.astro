@@ -2,60 +2,101 @@
 import { Image } from "astro:assets";
 import { awards } from "../data/awards";
 import IconExpand from "./icons/IconExpand.astro";
+import { ui } from "../i18n/ui";
 ---
 
 <section class="awards" id="reconocimientos" aria-labelledby="awards-title">
   <div class="container">
-    <h2 class="section-heading awards__title" id="awards-title">
-      Reconocimientos
+    <h2
+      class="section-heading awards__title"
+      id="awards-title"
+      data-i18n-es={ui.es.awardsHeading}
+      data-i18n-en={ui.en.awardsHeading}
+    >
+      {ui.es.awardsHeading}
     </h2>
 
     <ul class="awards__list">
       {
-        awards.map((award) => (
-          <li
-            class:list={[
-              "awards__item",
-              { "awards__item--reverse": award.mediaFirst },
-            ]}
-            data-reveal
-          >
-            <div class="awards__body">
-              <div class="awards__heading">
-                <h3 class="awards__item-title">{award.title}</h3>
-                <p class="awards__meta">
-                  {award.date} - {award.issuer}
+        awards.map((award) => {
+          const labelEs = `${ui.es.awardsViewLarger}: ${award.title}`;
+          const labelEn = `${ui.en.awardsViewLarger}: ${award.titleEn}`;
+          const altEs = `${ui.es.awardsCertificate}: ${award.title}`;
+          const altEn = `${ui.en.awardsCertificate}: ${award.titleEn}`;
+
+          return (
+            <li
+              class:list={[
+                "awards__item",
+                { "awards__item--reverse": award.mediaFirst },
+              ]}
+              data-reveal
+            >
+              <div class="awards__body">
+                <div class="awards__heading">
+                  <h3
+                    class="awards__item-title"
+                    data-i18n-es={award.title}
+                    data-i18n-en={award.titleEn}
+                  >
+                    {award.title}
+                  </h3>
+                  <p class="awards__meta">
+                    {award.date} -{" "}
+                    <span
+                      data-i18n-es={award.issuer}
+                      data-i18n-en={award.issuerEn}
+                    >
+                      {award.issuer}
+                    </span>
+                  </p>
+                </div>
+                <p
+                  class="awards__description"
+                  data-i18n-es={award.description}
+                  data-i18n-en={award.descriptionEn}
+                >
+                  {award.description}
                 </p>
               </div>
-              <p class="awards__description">{award.description}</p>
-            </div>
 
-            <button
-              class="awards__media"
-              type="button"
-              data-lightbox-trigger
-              data-lightbox-src={award.image?.src}
-              data-lightbox-alt={`Certificado: ${award.title}`}
-              data-lightbox-title={award.title}
-              aria-label={`Ver en grande: ${award.title}`}
-            >
-              {award.image ? (
-                <Image
-                  class="awards__media-image"
-                  src={award.image}
-                  alt=""
-                  width={422}
-                  height={240}
-                />
-              ) : (
-                <span class="awards__media-placeholder" aria-hidden="true" />
-              )}
-              <span class="awards__expand" aria-hidden="true">
-                <IconExpand />
-              </span>
-            </button>
-          </li>
-        ))
+              <button
+                class="awards__media"
+                type="button"
+                data-lightbox-trigger
+                data-lightbox-src={award.image?.src}
+                data-lightbox-alt={altEs}
+                data-lightbox-title={award.title}
+                aria-label={labelEs}
+                data-i18n-attrs-es={JSON.stringify({
+                  "aria-label": labelEs,
+                  "data-lightbox-alt": altEs,
+                  "data-lightbox-title": award.title,
+                })}
+                data-i18n-attrs-en={JSON.stringify({
+                  "aria-label": labelEn,
+                  "data-lightbox-alt": altEn,
+                  "data-lightbox-title": award.titleEn,
+                })}
+              >
+                {award.image ? (
+                  <Image
+                    class="awards__media-image"
+                    src={award.image}
+                    alt=""
+                    width={422}
+                    height={240}
+                  />
+                ) : (
+                  <span class="awards__media-placeholder" aria-hidden="true" />
+                )}
+                <span class="awards__expand" aria-hidden="true">
+                  <IconExpand />
+                </span>
+              </button>
+            </li>
+          );
+        })
       }
     </ul>
   </div>

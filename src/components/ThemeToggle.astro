@@ -1,13 +1,14 @@
 ---
 import IconSun from "./icons/IconSun.astro";
 import IconMoon from "./icons/IconMoon.astro";
+import { ui } from "../i18n/ui";
 ---
 
 <button
   class="theme-toggle"
   type="button"
   id="theme-toggle"
-  aria-label="Cambiar a modo oscuro"
+  aria-label={ui.es.themeToDark}
 >
   <IconSun class="theme-toggle__icon theme-toggle__icon--sun" />
   <IconMoon class="theme-toggle__icon theme-toggle__icon--moon" />
@@ -52,7 +53,12 @@ import IconMoon from "./icons/IconMoon.astro";
 </style>
 
 <script>
+  import { ui } from "../i18n/ui";
+
+  type Lang = "es" | "en";
+
   const STORAGE_KEY = "theme";
+  const LANG_STORAGE_KEY = "lang";
   const root = document.documentElement;
   const button = document.querySelector<HTMLButtonElement>("#theme-toggle");
   const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -65,15 +71,23 @@ import IconMoon from "./icons/IconMoon.astro";
     }
   };
 
+  const getStoredLang = (): Lang => {
+    try {
+      return localStorage.getItem(LANG_STORAGE_KEY) === "en" ? "en" : "es";
+    } catch {
+      return "es";
+    }
+  };
+
   const resolveTheme = () =>
     root.dataset.theme ?? (media.matches ? "dark" : "light");
 
-  const syncButton = () => {
+  const syncButton = (lang: Lang = getStoredLang()) => {
     const isDark = resolveTheme() === "dark";
     button?.classList.toggle("is-dark", isDark);
     button?.setAttribute(
       "aria-label",
-      isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro",
+      isDark ? ui[lang].themeToLight : ui[lang].themeToDark,
     );
   };
 
@@ -89,10 +103,12 @@ import IconMoon from "./icons/IconMoon.astro";
     syncButton();
   });
 
-  // Keeps the icon correct if the OS theme changes while the page is open,
-  // but only when the visitor hasn't made an explicit choice of their own.
   media.addEventListener("change", () => {
     if (!getStoredTheme()) syncButton();
+  });
+
+  document.addEventListener("app:langchange", (event) => {
+    syncButton((event as CustomEvent<{ lang: Lang }>).detail.lang);
   });
 
   syncButton();

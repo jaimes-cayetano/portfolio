@@ -2,14 +2,20 @@
 import { Image } from "astro:assets";
 import { education } from "../data/education";
 import IconEye from "./icons/IconEye.astro";
+import { ui } from "../i18n/ui";
 
 const LOGO_WIDTH = 72;
 ---
 
 <section class="education" id="educacion" aria-labelledby="education-title">
   <div class="container">
-    <h2 class="section-heading education__title" id="education-title">
-      Educación
+    <h2
+      class="section-heading education__title"
+      id="education-title"
+      data-i18n-es={ui.es.educationHeading}
+      data-i18n-en={ui.en.educationHeading}
+    >
+      {ui.es.educationHeading}
     </h2>
 
     <ul class="education__list">
@@ -18,24 +24,51 @@ const LOGO_WIDTH = 72;
           const logoHeight = Math.round(
             (item.logo.height / item.logo.width) * LOGO_WIDTH,
           );
+          const altEs = `${ui.es.educationCertificateLabel}: ${item.title}`;
+          const altEn = `${ui.en.educationCertificateLabel}: ${item.titleEn}`;
 
           return (
             <li class="education__item" data-reveal>
               <div class="education__content">
-                <h3 class="education__item-title">{item.title}</h3>
+                <h3
+                  class="education__item-title"
+                  data-i18n-es={item.title}
+                  data-i18n-en={item.titleEn}
+                >
+                  {item.title}
+                </h3>
                 <p class="education__meta">
-                  {item.period} - {item.institution}
+                  {item.period} -{" "}
+                  <span
+                    data-i18n-es={item.institution}
+                    data-i18n-en={item.institutionEn}
+                  >
+                    {item.institution}
+                  </span>
                 </p>
                 <button
                   class="education__link"
                   type="button"
                   data-lightbox-trigger
                   data-lightbox-src={item.certificateImage?.src}
-                  data-lightbox-alt={`Constancia: ${item.title}`}
+                  data-lightbox-alt={altEs}
                   data-lightbox-title={item.title}
+                  data-i18n-attrs-es={JSON.stringify({
+                    "data-lightbox-alt": altEs,
+                    "data-lightbox-title": item.title,
+                  })}
+                  data-i18n-attrs-en={JSON.stringify({
+                    "data-lightbox-alt": altEn,
+                    "data-lightbox-title": item.titleEn,
+                  })}
                 >
                   <IconEye class="education__link-icon" />
-                  Ver constancia
+                  <span
+                    data-i18n-es={ui.es.educationViewCertificate}
+                    data-i18n-en={ui.en.educationViewCertificate}
+                  >
+                    {ui.es.educationViewCertificate}
+                  </span>
                 </button>
               </div>
               <div class="education__logo-slot">
@@ -45,6 +78,8 @@ const LOGO_WIDTH = 72;
                   alt={item.logoAlt}
                   width={LOGO_WIDTH}
                   height={logoHeight}
+                  data-i18n-attrs-es={JSON.stringify({ alt: item.logoAlt })}
+                  data-i18n-attrs-en={JSON.stringify({ alt: item.logoAltEn })}
                 />
               </div>
             </li>

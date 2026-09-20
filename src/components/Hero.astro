@@ -4,25 +4,36 @@ import IconDownload from "./icons/IconDownload.astro";
 import IconLinkedIn from "./icons/IconLinkedIn.astro";
 import IconGitHub from "./icons/IconGitHub.astro";
 import { profile } from "../data/profile";
+import { ui } from "../i18n/ui";
 ---
 
 <section class="hero" id="sobre-mi" aria-labelledby="hero-title">
   <div class="container hero__inner" data-reveal>
     <h1 class="hero__title" id="hero-title">
-      <span class="hero__wave" aria-hidden="true">👋</span> Hola, soy {
-        profile.name
-      }
+      <span class="hero__wave" aria-hidden="true">👋</span>{" "}
+      <span data-i18n-es={ui.es.heroGreeting} data-i18n-en={ui.en.heroGreeting}>
+        {ui.es.heroGreeting}
+      </span>{" "}
+      {profile.name}
     </h1>
     <p class="hero__subtitle">{profile.role}</p>
     <p class="hero__lead">
-      <strong>{profile.yearsExperience}</strong>
-      {" "}{profile.intro}
+      <strong
+        data-i18n-es={profile.yearsExperience}
+        data-i18n-en={profile.yearsExperienceEn}
+      >
+        {profile.yearsExperience}
+      </strong>{" "}
+      <span data-i18n-es={profile.intro} data-i18n-en={profile.introEn}>
+        {profile.intro}
+      </span>
     </p>
 
     <div class="hero__actions">
       <Button
         href={profile.links.resume}
-        label="Curriculum"
+        label={ui.es.heroResume}
+        labelEn={ui.en.heroResume}
         accent="var(--color-primary)"
         download
       >
@@ -30,7 +41,8 @@ import { profile } from "../data/profile";
       </Button>
       <Button
         href={profile.links.linkedin}
-        label="LinkedIn"
+        label={ui.es.heroLinkedIn}
+        labelEn={ui.en.heroLinkedIn}
         accent="var(--color-linkedin)"
         external
       >
@@ -38,7 +50,8 @@ import { profile } from "../data/profile";
       </Button>
       <Button
         href={profile.links.github}
-        label="Github"
+        label={ui.es.heroGithub}
+        labelEn={ui.en.heroGithub}
         accent="var(--color-github)"
         external
       >

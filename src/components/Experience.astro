@@ -1,14 +1,20 @@
 ---
 import { experience } from "../data/experience";
 import IconChevron from "./icons/IconChevron.astro";
+import { ui } from "../i18n/ui";
 
 const VISIBLE_COUNT = 3;
 ---
 
 <section class="experience" id="experiencia" aria-labelledby="experience-title">
   <div class="container">
-    <h2 class="section-heading experience__title" id="experience-title">
-      Experiencia
+    <h2
+      class="section-heading experience__title"
+      id="experience-title"
+      data-i18n-es={ui.es.experienceHeading}
+      data-i18n-en={ui.en.experienceHeading}
+    >
+      {ui.es.experienceHeading}
     </h2>
 
     <ol class="experience__list">
@@ -23,26 +29,51 @@ const VISIBLE_COUNT = 3;
               <div class="experience__marker-col">
                 <span class="experience__dot" aria-hidden="true" />
                 <div class="experience__role">
-                  <h3 class="experience__role-title">{entry.role}</h3>
+                  <h3
+                    class="experience__role-title"
+                    data-i18n-es={entry.role}
+                    data-i18n-en={entry.roleEn}
+                  >
+                    {entry.role}
+                  </h3>
                   <p class="experience__org">{entry.company}</p>
-                  <p class="experience__period">{entry.period}</p>
+                  <p
+                    class="experience__period"
+                    data-i18n-es={entry.period}
+                    data-i18n-en={entry.periodEn}
+                  >
+                    {entry.period}
+                  </p>
                 </div>
               </div>
 
               <div class="experience__achievements">
                 {visible.map((achievement) => (
                   <article class="experience__achievement">
-                    <h4 class="experience__achievement-title">
+                    <h4
+                      class="experience__achievement-title"
+                      data-i18n-es={achievement.title}
+                      data-i18n-en={achievement.titleEn}
+                    >
                       {achievement.title}
                     </h4>
                     <ul class="experience__tags">
                       {achievement.tags.map((tag) => (
-                        <li class="badge" style={`--badge-color: ${tag.color}`}>
+                        <li
+                          class="badge"
+                          style={`--badge-color: ${tag.color}`}
+                          data-i18n-es={tag.label}
+                          data-i18n-en={tag.labelEn}
+                        >
                           {tag.label}
                         </li>
                       ))}
                     </ul>
-                    <p class="experience__description">
+                    <p
+                      class="experience__description"
+                      data-i18n-es={achievement.description}
+                      data-i18n-en={achievement.descriptionEn}
+                    >
                       {achievement.description}
                     </p>
                   </article>
@@ -53,7 +84,11 @@ const VISIBLE_COUNT = 3;
                     <div class="experience__more-inner">
                       {hidden.map((achievement) => (
                         <article class="experience__achievement">
-                          <h4 class="experience__achievement-title">
+                          <h4
+                            class="experience__achievement-title"
+                            data-i18n-es={achievement.title}
+                            data-i18n-en={achievement.titleEn}
+                          >
                             {achievement.title}
                           </h4>
                           <ul class="experience__tags">
@@ -61,12 +96,18 @@ const VISIBLE_COUNT = 3;
                               <li
                                 class="badge"
                                 style={`--badge-color: ${tag.color}`}
+                                data-i18n-es={tag.label}
+                                data-i18n-en={tag.labelEn}
                               >
                                 {tag.label}
                               </li>
                             ))}
                           </ul>
-                          <p class="experience__description">
+                          <p
+                            class="experience__description"
+                            data-i18n-es={achievement.description}
+                            data-i18n-en={achievement.descriptionEn}
+                          >
                             {achievement.description}
                           </p>
                         </article>
@@ -83,15 +124,22 @@ const VISIBLE_COUNT = 3;
                     aria-controls={panelId}
                     data-experience-toggle
                   >
-                    <span class="experience__toggle-label" data-label-more>
-                      Ver más
+                    <span
+                      class="experience__toggle-label"
+                      data-label-more
+                      data-i18n-es={ui.es.experienceShowMore}
+                      data-i18n-en={ui.en.experienceShowMore}
+                    >
+                      {ui.es.experienceShowMore}
                     </span>
                     <span
                       class="experience__toggle-label"
                       data-label-less
                       hidden
+                      data-i18n-es={ui.es.experienceShowLess}
+                      data-i18n-en={ui.en.experienceShowLess}
                     >
-                      Ver menos
+                      {ui.es.experienceShowLess}
                     </span>
                     <IconChevron class="experience__toggle-icon" />
                   </button>

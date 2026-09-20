@@ -1,13 +1,16 @@
 ---
 import "../styles/global.css";
 import { profile } from "../data/profile";
+import { ui } from "../i18n/ui";
 
 interface Props {
   title: string;
+  titleEn: string;
   description: string;
+  descriptionEn: string;
 }
 
-const { title, description } = Astro.props;
+const { title, titleEn, description, descriptionEn } = Astro.props;
 const canonicalURL = Astro.site
   ? new URL(Astro.url.pathname, Astro.site)
   : Astro.url;
@@ -38,8 +41,13 @@ const personSchema = {
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title data-i18n-es={title} data-i18n-en={titleEn}>{title}</title>
+    <meta
+      name="description"
+      content={description}
+      data-i18n-attrs-es={JSON.stringify({ content: description })}
+      data-i18n-attrs-en={JSON.stringify({ content: descriptionEn })}
+    />
     <link rel="canonical" href={canonicalURL} />
 
     <meta property="og:type" content="website" />
@@ -63,8 +71,57 @@ const personSchema = {
     />
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+    <a
+      class="skip-link"
+      href="#main-content"
+      data-i18n-es={ui.es.skipLink}
+      data-i18n-en={ui.en.skipLink}
+    >
+      {ui.es.skipLink}
+    </a>
     <slot />
+    <script>
+      const STORAGE_KEY = "lang";
+
+      function applyLanguage(lang: "es" | "en") {
+        document.documentElement.lang = lang;
+
+        document
+          .querySelectorAll<HTMLElement>("[data-i18n-es]")
+          .forEach((el) => {
+            const text = lang === "en" ? el.dataset.i18nEn : el.dataset.i18nEs;
+            if (text !== undefined) el.textContent = text;
+          });
+
+        document
+          .querySelectorAll<HTMLElement>("[data-i18n-attrs-es]")
+          .forEach((el) => {
+            const raw =
+              lang === "en" ? el.dataset.i18nAttrsEn : el.dataset.i18nAttrsEs;
+            if (!raw) return;
+            const attrs = JSON.parse(raw) as Record<string, string>;
+            for (const [name, value] of Object.entries(attrs)) {
+              el.setAttribute(name, value);
+            }
+          });
+      }
+
+      const getStoredLang = (): "es" | "en" => {
+        try {
+          return localStorage.getItem(STORAGE_KEY) === "en" ? "en" : "es";
+        } catch {
+          return "es";
+        }
+      };
+
+      applyLanguage(getStoredLang());
+
+      document.addEventListener("app:langchange", (event) => {
+        applyLanguage(
+          (event as CustomEvent<{ lang: "es" | "en" }>).detail.lang,
+        );
+      });
+    </script>
     <script>
       const revealElements =
         document.querySelectorAll<HTMLElement>("[data-reveal]");

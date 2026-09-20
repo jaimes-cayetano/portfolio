@@ -4,29 +4,40 @@ import { Image } from "astro:assets";
 import IconLinkedIn from "./icons/IconLinkedIn.astro";
 import gmailIcon from "../assets/icons/gmail.png";
 import { profile } from "../data/profile";
+import { ui } from "../i18n/ui";
 ---
 
 <section class="contact" id="contacto" aria-labelledby="contact-title">
   <div class="container contact__inner" data-reveal>
-    <h2 class="section-heading contact__title" id="contact-title">
-      Contáctame
+    <h2
+      class="section-heading contact__title"
+      id="contact-title"
+      data-i18n-es={ui.es.contactHeading}
+      data-i18n-en={ui.en.contactHeading}
+    >
+      {ui.es.contactHeading}
     </h2>
-    <p class="contact__description">
-      ¿Tienes una idea, propuesta o simplemente quieres conectar? Puedes
-      encontrarme en mis canales profesionales.
+    <p
+      class="contact__description"
+      data-i18n-es={ui.es.contactDescription}
+      data-i18n-en={ui.en.contactDescription}
+    >
+      {ui.es.contactDescription}
     </p>
 
     <div class="contact__actions">
       <Button
         href={`mailto:${profile.email}`}
-        label="Enviar correo"
+        label={ui.es.contactSendEmail}
+        labelEn={ui.en.contactSendEmail}
         accent="var(--color-mail)"
       >
         <Image slot="icon" src={gmailIcon} alt="" width={20} height={16} />
       </Button>
       <Button
         href={profile.links.linkedin}
-        label="Ver perfil"
+        label={ui.es.contactViewProfile}
+        labelEn={ui.en.contactViewProfile}
         accent="var(--color-linkedin)"
         external
       >

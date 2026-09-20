@@ -1,0 +1,75 @@
+---
+import { ui } from "../i18n/ui";
+---
+
+<button
+  class="lang-toggle"
+  type="button"
+  id="lang-toggle"
+  aria-label={ui.es.langToggleLabel}
+>
+  <span data-lang-code>ES</span>
+</button>
+
+<style>
+  .lang-toggle {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 0.625rem;
+    background: none;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    border-radius: 999px;
+    color: var(--color-ink);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.02em;
+  }
+
+  .lang-toggle:hover,
+  .lang-toggle:focus-visible {
+    background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+</style>
+
+<script>
+  import { ui } from "../i18n/ui";
+
+  type Lang = "es" | "en";
+
+  const STORAGE_KEY = "lang";
+  const button = document.querySelector<HTMLButtonElement>("#lang-toggle");
+  const code = button?.querySelector<HTMLElement>("[data-lang-code]");
+
+  const getStoredLang = (): Lang => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === "en" ? "en" : "es";
+    } catch {
+      return "es";
+    }
+  };
+
+  const syncButton = (lang: Lang) => {
+    if (code) code.textContent = lang.toUpperCase();
+    button?.setAttribute("aria-label", ui[lang].langToggleLabel);
+  };
+
+  button?.addEventListener("click", () => {
+    const next: Lang = getStoredLang() === "en" ? "es" : "en";
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // Private browsing / disabled storage: switching still works for
+      // this page view, it just won't be remembered next visit.
+    }
+    syncButton(next);
+    document.dispatchEvent(
+      new CustomEvent("app:langchange", { detail: { lang: next } }),
+    );
+  });
+
+  syncButton(getStoredLang());
+</script>

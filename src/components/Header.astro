@@ -1,13 +1,21 @@
 ---
 import { navLinks } from "../data/nav";
 import ThemeToggle from "./ThemeToggle.astro";
+import LangToggle from "./LangToggle.astro";
+import { ui } from "../i18n/ui";
 ---
 
 <header class="header">
   <div class="container header__inner">
     <a class="header__brand" href="#sobre-mi">JC</a>
 
-    <nav class="header__nav" id="primary-nav" aria-label="Navegación principal">
+    <nav
+      class="header__nav"
+      id="primary-nav"
+      aria-label={ui.es.navAriaLabel}
+      data-i18n-attrs-es={JSON.stringify({ "aria-label": ui.es.navAriaLabel })}
+      data-i18n-attrs-en={JSON.stringify({ "aria-label": ui.en.navAriaLabel })}
+    >
       <ul class="header__list">
         {
           navLinks.map((link, index) => (
@@ -16,6 +24,8 @@ import ThemeToggle from "./ThemeToggle.astro";
                 class="header__link"
                 href={link.href}
                 aria-current={index === 0 ? "page" : undefined}
+                data-i18n-es={link.label}
+                data-i18n-en={link.labelEn}
               >
                 {link.label}
               </a>
@@ -26,6 +36,7 @@ import ThemeToggle from "./ThemeToggle.astro";
     </nav>
 
     <div class="header__actions">
+      <LangToggle />
       <ThemeToggle />
 
       <button
@@ -34,7 +45,13 @@ import ThemeToggle from "./ThemeToggle.astro";
         aria-expanded="false"
         aria-controls="primary-nav"
       >
-        <span class="visually-hidden">Abrir menú de navegación</span>
+        <span
+          class="visually-hidden"
+          data-i18n-es={ui.es.navToggleLabel}
+          data-i18n-en={ui.en.navToggleLabel}
+        >
+          {ui.es.navToggleLabel}
+        </span>
         <span class="header__toggle-bar"></span>
         <span class="header__toggle-bar"></span>
         <span class="header__toggle-bar"></span>

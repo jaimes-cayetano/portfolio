@@ -1,11 +1,18 @@
 ---
 import IconClose from "./icons/IconClose.astro";
+import { ui } from "../i18n/ui";
 ---
 
 <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-caption">
   <button class="lightbox__close" type="button" data-lightbox-close>
     <IconClose />
-    <span class="visually-hidden">Cerrar</span>
+    <span
+      class="visually-hidden"
+      data-i18n-es={ui.es.lightboxClose}
+      data-i18n-en={ui.en.lightboxClose}
+    >
+      {ui.es.lightboxClose}
+    </span>
   </button>
   <img class="lightbox__image" data-lightbox-image alt="" hidden />
   <div
