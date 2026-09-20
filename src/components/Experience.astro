@@ -1,0 +1,272 @@
+---
+import { experience } from "../data/experience";
+import IconChevron from "./icons/IconChevron.astro";
+
+const VISIBLE_COUNT = 3;
+---
+
+<section class="experience" id="experiencia" aria-labelledby="experience-title">
+  <div class="container">
+    <h2 class="section-heading experience__title" id="experience-title">
+      Experiencia
+    </h2>
+
+    <ol class="experience__list">
+      {
+        experience.map((entry, entryIndex) => {
+          const visible = entry.achievements.slice(0, VISIBLE_COUNT);
+          const hidden = entry.achievements.slice(VISIBLE_COUNT);
+          const panelId = `experience-more-${entryIndex}`;
+
+          return (
+            <li class="experience__item" data-reveal>
+              <div class="experience__marker-col">
+                <span class="experience__dot" aria-hidden="true" />
+                <div class="experience__role">
+                  <h3 class="experience__role-title">{entry.role}</h3>
+                  <p class="experience__org">{entry.company}</p>
+                  <p class="experience__period">{entry.period}</p>
+                </div>
+              </div>
+
+              <div class="experience__achievements">
+                {visible.map((achievement) => (
+                  <article class="experience__achievement">
+                    <h4 class="experience__achievement-title">
+                      {achievement.title}
+                    </h4>
+                    <ul class="experience__tags">
+                      {achievement.tags.map((tag) => (
+                        <li class="badge" style={`--badge-color: ${tag.color}`}>
+                          {tag.label}
+                        </li>
+                      ))}
+                    </ul>
+                    <p class="experience__description">
+                      {achievement.description}
+                    </p>
+                  </article>
+                ))}
+
+                {hidden.length > 0 && (
+                  <div class="experience__more" id={panelId}>
+                    <div class="experience__more-inner">
+                      {hidden.map((achievement) => (
+                        <article class="experience__achievement">
+                          <h4 class="experience__achievement-title">
+                            {achievement.title}
+                          </h4>
+                          <ul class="experience__tags">
+                            {achievement.tags.map((tag) => (
+                              <li
+                                class="badge"
+                                style={`--badge-color: ${tag.color}`}
+                              >
+                                {tag.label}
+                              </li>
+                            ))}
+                          </ul>
+                          <p class="experience__description">
+                            {achievement.description}
+                          </p>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {hidden.length > 0 && (
+                  <button
+                    class="experience__toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls={panelId}
+                    data-experience-toggle
+                  >
+                    <span class="experience__toggle-label" data-label-more>
+                      Ver más
+                    </span>
+                    <span
+                      class="experience__toggle-label"
+                      data-label-less
+                      hidden
+                    >
+                      Ver menos
+                    </span>
+                    <IconChevron class="experience__toggle-icon" />
+                  </button>
+                )}
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .experience {
+    padding-block: var(--space-8);
+  }
+
+  .experience__title {
+    margin-bottom: var(--space-6);
+  }
+
+  .experience__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .experience__item {
+    display: grid;
+    grid-template-columns: minmax(0, 18rem) 1fr;
+    gap: var(--space-2) var(--space-6);
+  }
+
+  .experience__marker-col {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    height: 100%;
+  }
+
+  .experience__item:not(:last-child) .experience__marker-col::after {
+    content: "";
+    position: absolute;
+    top: 1.5rem;
+    bottom: calc(-1 * var(--space-6));
+    left: 0.6875rem;
+    width: 2px;
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+
+  .experience__dot {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    z-index: 1;
+  }
+
+  .experience__role-title {
+    font-size: var(--fs-item-title);
+    font-weight: var(--fw-medium);
+    color: var(--color-ink);
+  }
+
+  .experience__org {
+    margin-top: var(--space-2);
+    font-size: var(--fs-body);
+    color: var(--color-meta-strong);
+  }
+
+  .experience__period {
+    margin-top: var(--space-1);
+    font-size: var(--fs-body);
+    color: var(--color-meta-soft);
+  }
+
+  .experience__achievements {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .experience__achievement-title {
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-semibold);
+    color: var(--color-meta-strong);
+  }
+
+  .experience__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+  }
+
+  .experience__description {
+    margin-top: var(--space-1);
+    color: var(--color-meta-strong);
+  }
+
+  .experience__more {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--transition-expand);
+  }
+
+  .experience__more.is-expanded {
+    grid-template-rows: 1fr;
+  }
+
+  .experience__more-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .experience__toggle {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-body);
+  }
+
+  .experience__toggle:hover,
+  .experience__toggle:focus-visible {
+    color: var(--color-primary-soft);
+  }
+
+  .experience__toggle :global(.experience__toggle-icon) {
+    transition: transform var(--transition-hover);
+  }
+
+  .experience__toggle[aria-expanded="true"] :global(.experience__toggle-icon) {
+    transform: rotate(180deg);
+  }
+
+  @media (max-width: 55rem) {
+    .experience__item {
+      grid-template-columns: 1fr;
+    }
+
+    .experience__marker-col::after {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const toggles = document.querySelectorAll<HTMLButtonElement>(
+    "[data-experience-toggle]",
+  );
+
+  toggles.forEach((toggle) => {
+    const panelId = toggle.getAttribute("aria-controls");
+    const panel = panelId ? document.getElementById(panelId) : null;
+    const labelMore = toggle.querySelector<HTMLElement>("[data-label-more]");
+    const labelLess = toggle.querySelector<HTMLElement>("[data-label-less]");
+
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      panel?.classList.toggle("is-expanded", !expanded);
+      labelMore?.toggleAttribute("hidden", !expanded);
+      labelLess?.toggleAttribute("hidden", expanded);
+    });
+  });
+</script>

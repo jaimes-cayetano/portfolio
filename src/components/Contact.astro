@@ -1,0 +1,62 @@
+---
+import Button from "./Button.astro";
+import { Image } from "astro:assets";
+import IconLinkedIn from "./icons/IconLinkedIn.astro";
+import gmailIcon from "../assets/icons/gmail.png";
+import { profile } from "../data/profile";
+---
+
+<section class="contact" id="contacto" aria-labelledby="contact-title">
+  <div class="container contact__inner" data-reveal>
+    <h2 class="section-heading contact__title" id="contact-title">
+      Contáctame
+    </h2>
+    <p class="contact__description">
+      ¿Tienes una idea, propuesta o simplemente quieres conectar? Puedes
+      encontrarme en mis canales profesionales.
+    </p>
+
+    <div class="contact__actions">
+      <Button
+        href={`mailto:${profile.email}`}
+        label="Enviar correo"
+        accent="var(--color-mail)"
+      >
+        <Image slot="icon" src={gmailIcon} alt="" width={20} height={16} />
+      </Button>
+      <Button
+        href={profile.links.linkedin}
+        label="Ver perfil"
+        accent="var(--color-linkedin)"
+        external
+      >
+        <IconLinkedIn slot="icon" />
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-block: var(--space-8);
+  }
+
+  .contact__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .contact__description {
+    max-width: 40rem;
+  }
+
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+</style>

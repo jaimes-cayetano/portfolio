@@ -1,0 +1,144 @@
+---
+import IconClose from "./icons/IconClose.astro";
+---
+
+<dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-caption">
+  <button class="lightbox__close" type="button" data-lightbox-close>
+    <IconClose />
+    <span class="visually-hidden">Cerrar</span>
+  </button>
+  <img class="lightbox__image" data-lightbox-image alt="" hidden />
+  <div
+    class="lightbox__placeholder"
+    data-lightbox-placeholder
+    hidden
+    aria-hidden="true"
+  >
+  </div>
+  <p class="lightbox__caption" id="lightbox-caption" data-lightbox-caption></p>
+</dialog>
+
+<style>
+  .lightbox {
+    width: 90vw;
+    height: 90vh;
+    max-width: 1200px;
+    max-height: 90vh;
+    margin: auto;
+    padding: var(--space-3);
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+  }
+
+  .lightbox::backdrop {
+    background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+  }
+
+  .lightbox[open] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    animation: lightbox-in var(--transition-slow);
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .lightbox__close {
+    flex-shrink: 0;
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-ink);
+    border-radius: 50%;
+  }
+
+  .lightbox__close:hover,
+  .lightbox__close:focus-visible {
+    background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+
+  .lightbox__image {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+  }
+
+  .lightbox__placeholder {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    background: var(--color-placeholder);
+    border-radius: var(--radius-sm);
+  }
+
+  .lightbox__caption {
+    flex-shrink: 0;
+    color: var(--color-meta-strong);
+    font-weight: var(--fw-medium);
+    text-align: center;
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("#lightbox");
+  const image = dialog?.querySelector<HTMLImageElement>(
+    "[data-lightbox-image]",
+  );
+  const placeholder = dialog?.querySelector<HTMLElement>(
+    "[data-lightbox-placeholder]",
+  );
+  const caption = dialog?.querySelector<HTMLElement>("[data-lightbox-caption]");
+  const closeButton = dialog?.querySelector<HTMLButtonElement>(
+    "[data-lightbox-close]",
+  );
+
+  const triggers = document.querySelectorAll<HTMLButtonElement>(
+    "[data-lightbox-trigger]",
+  );
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const src = trigger.getAttribute("data-lightbox-src");
+      const alt = trigger.getAttribute("data-lightbox-alt") ?? "";
+      const title = trigger.getAttribute("data-lightbox-title") ?? "";
+
+      if (src && image) {
+        image.src = src;
+        image.alt = alt;
+        image.hidden = false;
+        placeholder?.setAttribute("hidden", "");
+      } else {
+        image?.setAttribute("hidden", "");
+        placeholder?.removeAttribute("hidden");
+      }
+
+      if (caption) caption.textContent = title;
+      dialog?.showModal();
+    });
+  });
+
+  closeButton?.addEventListener("click", () => dialog?.close());
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+</script>

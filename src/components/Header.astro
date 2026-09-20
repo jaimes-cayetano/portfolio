@@ -1,0 +1,261 @@
+---
+import { navLinks } from "../data/nav";
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__brand" href="#sobre-mi">JC</a>
+
+    <button
+      class="header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+    >
+      <span class="visually-hidden">Abrir menú de navegación</span>
+      <span class="header__toggle-bar"></span>
+      <span class="header__toggle-bar"></span>
+      <span class="header__toggle-bar"></span>
+    </button>
+
+    <nav class="header__nav" id="primary-nav" aria-label="Navegación principal">
+      <ul class="header__list">
+        {
+          navLinks.map((link, index) => (
+            <li class="header__item">
+              <a
+                class="header__link"
+                href={link.href}
+                aria-current={index === 0 ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg);
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
+  }
+
+  .header.is-scrolled {
+    border-bottom-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-ink) 5%, transparent);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+  }
+
+  .header__brand {
+    font-weight: var(--fw-bold);
+    font-size: 1.25rem;
+    color: var(--color-primary);
+  }
+
+  .header__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background: none;
+    border: none;
+  }
+
+  .header__toggle-bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--color-ink);
+    border-radius: 1px;
+    transition:
+      transform var(--transition-base),
+      opacity var(--transition-base);
+  }
+
+  .header__toggle[aria-expanded="true"] .header__toggle-bar:nth-child(2) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .header__toggle[aria-expanded="true"] .header__toggle-bar:nth-child(3) {
+    opacity: 0;
+  }
+
+  .header__toggle[aria-expanded="true"] .header__toggle-bar:nth-child(4) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .header__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .header__link {
+    position: relative;
+    display: inline-block;
+    padding-block: var(--space-1);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-regular);
+    color: var(--color-ink);
+  }
+
+  .header__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--color-primary-soft);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-hover);
+  }
+
+  .header__link:hover::after,
+  .header__link:focus-visible::after,
+  .header__link[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  .header__link[aria-current="page"] {
+    font-weight: var(--fw-semibold);
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 63.9rem) {
+    .header__toggle {
+      display: flex;
+    }
+
+    .header__nav {
+      position: fixed;
+      inset: var(--header-height) 0 0 0;
+      background: var(--color-bg);
+      transform: translateY(-8px);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity var(--transition-base),
+        transform var(--transition-base),
+        visibility var(--transition-base);
+    }
+
+    .header__nav.is-open {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    .header__list {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding: var(--space-4) var(--container-padding);
+    }
+
+    .header__link {
+      font-size: var(--fs-item-title);
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>(".header");
+  const toggle = document.querySelector<HTMLButtonElement>(".header__toggle");
+  const nav = document.querySelector<HTMLElement>(".header__nav");
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".header__link"),
+  );
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    nav?.classList.toggle("is-open", !isOpen);
+  });
+
+  links.forEach((link) => {
+    link.addEventListener("click", () => {
+      toggle?.setAttribute("aria-expanded", "false");
+      nav?.classList.remove("is-open");
+    });
+  });
+
+  const sections = links
+    .map((link) =>
+      document.querySelector<HTMLElement>(link.getAttribute("href") ?? ""),
+    )
+    .filter((section): section is HTMLElement => section !== null);
+
+  // A narrow IntersectionObserver "band" can be skipped entirely by short
+  // sections during a fast scroll (flick, Page Down, scrollbar drag), so the
+  // active link silently stops updating. Recomputing directly from scroll
+  // position on every frame is slower to write but never misses a section.
+  const scroller = document.scrollingElement ?? document.documentElement;
+
+  const setActiveLink = () => {
+    const reference = (header?.offsetHeight ?? 0) + 32;
+    let activeSection = sections[0];
+
+    // The last section can't always be scrolled far enough past the
+    // reference line to "win" the loop below if there isn't enough page
+    // left beneath it — so once we've hit the bottom of the page, it wins
+    // outright regardless of where its top sits.
+    const atBottom =
+      window.innerHeight + window.scrollY >= scroller.scrollHeight - 2;
+
+    if (atBottom) {
+      activeSection = sections[sections.length - 1];
+    } else {
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top - reference <= 0) {
+          activeSection = section;
+        }
+      }
+    }
+
+    links.forEach((link) => {
+      const isActive = link.getAttribute("href") === `#${activeSection?.id}`;
+      if (isActive) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  let ticking = false;
+  const onScroll = () => {
+    header?.classList.toggle("is-scrolled", window.scrollY > 4);
+
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        setActiveLink();
+        ticking = false;
+      });
+    }
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+</script>

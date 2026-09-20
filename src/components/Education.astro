@@ -1,0 +1,155 @@
+---
+import { Image } from "astro:assets";
+import { education } from "../data/education";
+import IconEye from "./icons/IconEye.astro";
+
+const LOGO_WIDTH = 72;
+---
+
+<section class="education" id="educacion" aria-labelledby="education-title">
+  <div class="container">
+    <h2 class="section-heading education__title" id="education-title">
+      Educación
+    </h2>
+
+    <ul class="education__list">
+      {
+        education.map((item) => {
+          const logoHeight = Math.round(
+            (item.logo.height / item.logo.width) * LOGO_WIDTH,
+          );
+
+          return (
+            <li class="education__item" data-reveal>
+              <div class="education__content">
+                <h3 class="education__item-title">{item.title}</h3>
+                <p class="education__meta">
+                  {item.period} - {item.institution}
+                </p>
+                <button
+                  class="education__link"
+                  type="button"
+                  data-lightbox-trigger
+                  data-lightbox-src={item.certificateImage?.src}
+                  data-lightbox-alt={`Constancia: ${item.title}`}
+                  data-lightbox-title={item.title}
+                >
+                  <IconEye class="education__link-icon" />
+                  Ver constancia
+                </button>
+              </div>
+              <div class="education__logo-slot">
+                <Image
+                  class="education__logo"
+                  src={item.logo}
+                  alt={item.logoAlt}
+                  width={LOGO_WIDTH}
+                  height={logoHeight}
+                />
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .education {
+    padding-block: var(--space-8);
+  }
+
+  .education__title {
+    margin-bottom: var(--space-6);
+  }
+
+  .education__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .education__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-7);
+  }
+
+  .education__content {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .education__item-title {
+    font-size: var(--fs-item-title);
+    font-weight: var(--fw-medium);
+    color: var(--color-ink);
+    margin-bottom: 0.375rem;
+  }
+
+  .education__meta {
+    font-size: var(--fs-meta);
+    color: var(--color-meta-strong);
+    margin-bottom: var(--space-2);
+  }
+
+  .education__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: none;
+    border: none;
+    padding: 0.125rem 0;
+    color: var(--color-primary);
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-body);
+    border-bottom: 1px solid transparent;
+  }
+
+  .education__link:hover,
+  .education__link:focus-visible {
+    border-bottom-color: var(--color-primary);
+  }
+
+  .education__link :global(.education__link-icon) {
+    transition: transform var(--transition-hover);
+  }
+
+  .education__link:hover :global(.education__link-icon),
+  .education__link:focus-visible :global(.education__link-icon) {
+    transform: translateX(2px);
+  }
+
+  .education__logo-slot {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+  }
+
+  .education__logo {
+    width: 100%;
+    height: auto;
+    max-height: 4.5rem;
+    object-fit: contain;
+  }
+
+  @media (max-width: 40rem) {
+    .education__item {
+      gap: var(--space-3);
+    }
+
+    .education__logo-slot {
+      width: 3.25rem;
+    }
+
+    .education__logo {
+      max-height: 3.25rem;
+    }
+  }
+</style>

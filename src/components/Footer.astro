@@ -1,0 +1,38 @@
+---
+import { profile } from "../data/profile";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <p class="footer__name">{profile.fullName} · {profile.role}</p>
+    <p class="footer__copyright">© {year}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-footer-bg);
+    color: var(--color-footer-text);
+    padding-block: var(--space-4);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    text-align: center;
+  }
+
+  .footer__name,
+  .footer__copyright {
+    color: var(--color-footer-text);
+  }
+
+  .footer__copyright {
+    opacity: 0.7;
+    font-size: var(--fs-small);
+  }
+</style>
