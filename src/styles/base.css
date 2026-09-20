@@ -1,3 +1,16 @@
+/* Theme toggle changes color tokens on :root, but only elements with their
+ * own "transition" animate a property change — most headings, text and
+ * surfaces set color/background directly from those tokens with no
+ * transition of their own, so without this they'd snap instantly while
+ * html/body faded, reading as a patchy, out-of-sync theme switch. */
+*,
+*::before,
+*::after {
+  transition: background-color var(--transition-base), border-color var(--transition-base),
+    color var(--transition-base), box-shadow var(--transition-base), fill var(--transition-base),
+    stroke var(--transition-base);
+}
+
 html,
 body {
   background: var(--color-bg);
@@ -58,7 +71,8 @@ button {
   color: var(--color-bg);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-sm);
-  transition: top var(--transition-fast);
+  transition: top var(--transition-fast), background-color var(--transition-base),
+    color var(--transition-base);
 }
 
 .skip-link:focus-visible {
@@ -76,9 +90,12 @@ button {
   justify-content: center;
   height: 1.4375rem;
   padding: 0 var(--space-1);
-  border: 1px solid var(--badge-color, var(--color-meta-strong));
+  --badge-color-resolved: color-mix(in srgb,
+      var(--badge-color, var(--color-meta-strong)) calc(100% - var(--badge-lighten)),
+      white var(--badge-lighten));
+  border: 1px solid var(--badge-color-resolved);
   border-radius: var(--radius-sm);
-  color: var(--badge-color, var(--color-meta-strong));
+  color: var(--badge-color-resolved);
   font-size: var(--fs-small);
   font-weight: var(--fw-bold);
   white-space: nowrap;

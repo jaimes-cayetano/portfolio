@@ -26,7 +26,7 @@ export const experience: ExperienceRole[] = [
       {
         title: "Integración de soluciones de Inteligencia Artificial",
         tags: [
-          { label: "OpenAI", color: "#000000" },
+          { label: "OpenAI", color: "var(--color-ink)" },
           { label: "Gemini", color: "#8e75ff" },
           { label: "DeepSeek", color: "#4d6bfe" },
           { label: "Google Vision API", color: "#4285f4" },
@@ -54,7 +54,7 @@ export const experience: ExperienceRole[] = [
           { label: "Filament", color: "#f59e0b" },
           { label: "Laravel", color: "#ff2d20" },
           { label: "Docker", color: "#2496ed" },
-          { label: "Symfony", color: "#000000" },
+          { label: "Symfony", color: "var(--color-ink)" },
           { label: "MySQL", color: "#00758f" },
           { label: "Claude Code", color: "#d97757" },
           { label: "React", color: "#61dafb" },
@@ -67,7 +67,7 @@ export const experience: ExperienceRole[] = [
       {
         title: "Integración de plataformas de analítica, tracking y publicidad",
         tags: [
-          { label: "TikTok Pixel", color: "#000000" },
+          { label: "TikTok Pixel", color: "var(--color-ink)" },
           { label: "Meta Pixel", color: "#0866ff" },
           { label: "Google Tag Manager", color: "#246fdb" },
           { label: "Google Ad Manager", color: "#4285f4" },
@@ -107,7 +107,7 @@ export const experience: ExperienceRole[] = [
         title: "Mantenimiento y soporte de sistemas",
         tags: [
           { label: "Chamilo LMS", color: "#2e7bb4" },
-          { label: "Symfony", color: "#000000" },
+          { label: "Symfony", color: "var(--color-ink)" },
           { label: "MySQL", color: "#00758f" },
           { label: "Filament", color: "#f59e0b" },
           { label: "Laravel", color: "#ff2d20" },

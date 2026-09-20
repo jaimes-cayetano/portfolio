@@ -4,6 +4,8 @@
  * here so visual adjustments never require touching component markup.
  */
 :root {
+  color-scheme: light;
+
   /* ---- Color: surfaces ---- */
   --color-bg: #ffffff;
   --color-footer-bg: #000000;
@@ -22,6 +24,10 @@
   --color-linkedin: #0a66c2;
   --color-github: #000000;
   --color-mail: #ea4335;
+
+  /* Blends dark, low-contrast tag colors (data/experience.ts) toward white
+   * in dark mode only; 0% keeps every tag color exactly as authored. */
+  --badge-lighten: 0%;
 
   /* ---- Typography ---- */
   --font-family-base: "Montserrat", "Segoe UI", system-ui, sans-serif;
@@ -81,6 +87,55 @@
   --transition-slow: 450ms cubic-bezier(0.22, 1, 0.36, 1);
   --transition-expand: 400ms cubic-bezier(0.22, 1, 0.36, 1);
   /* collapse/expand panels */
+}
+
+/* Dark theme: follows the OS preference by default, and is overridden
+ * explicitly once the visitor picks a theme via the header toggle (which
+ * sets data-theme and persists it to localStorage). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --color-bg: #0f0f13;
+    --color-footer-bg: #000000;
+    --color-footer-text: #ffffff;
+    --color-placeholder: #26262e;
+
+    --color-ink: #f4f3f7;
+    --color-body: #c1c1cb;
+    --color-meta-strong: #d7d6de;
+    --color-meta-soft: #9c9ba6;
+
+    --color-primary: #b57fe6;
+    --color-primary-soft: #d3aef2;
+    --color-linkedin: #0a66c2;
+    --color-github: #e6e6ea;
+    --color-mail: #ea4335;
+
+    --badge-lighten: 42%;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0f0f13;
+  --color-footer-bg: #000000;
+  --color-footer-text: #ffffff;
+  --color-placeholder: #26262e;
+
+  --color-ink: #f4f3f7;
+  --color-body: #c1c1cb;
+  --color-meta-strong: #d7d6de;
+  --color-meta-soft: #9c9ba6;
+
+  --color-primary: #b57fe6;
+  --color-primary-soft: #d3aef2;
+  --color-linkedin: #0a66c2;
+  --color-github: #e6e6ea;
+  --color-mail: #ea4335;
+
+  --badge-lighten: 42%;
 }
 
 /* Distinct, more compact type & spacing scale for small screens instead of
