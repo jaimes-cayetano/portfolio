@@ -3,6 +3,15 @@ import senatiLogo from "../assets/logos/senati.png";
 import oracleAcademyLogo from "../assets/logos/oracle-academy.png";
 import platziLogo from "../assets/logos/platzi.png";
 import ciscoLogo from "../assets/logos/cisco.png";
+import senatiIaCertificate from "../assets/certificates/education/senati-ingenieria-software-ia-2022-2025.jpg";
+import oracleDatabaseDesignCertificate from "../assets/certificates/education/oracle-academy-database-design-2022-2023.jpg";
+import oracleDatabaseProgrammingCertificate from "../assets/certificates/education/oracle-academy-database-programming-2022-2023.jpg";
+import platziCertificate from "../assets/certificates/education/platzi-introduccion-ingenieria-software-2021.jpg";
+import ciscoCertificate from "../assets/certificates/education/cisco-python-get-connected-2022.jpg";
+import senatiIdiomasCertificate1 from "../assets/certificates/education/senati-idiomas-ingles-basico-2026-1.jpg";
+import senatiIdiomasCertificate2 from "../assets/certificates/education/senati-idiomas-ingles-basico-2026-2.jpg";
+import senatiIdiomasCertificate3 from "../assets/certificates/education/senati-idiomas-ingles-basico-2026-3.jpg";
+import senatiIdiomasCertificate4 from "../assets/certificates/education/senati-idiomas-ingles-basico-2026-4.jpg";
 
 export interface EducationItem {
   title: string;
@@ -13,7 +22,7 @@ export interface EducationItem {
   logo: ImageMetadata;
   logoAlt: string;
   logoAltEn: string;
-  certificateImage?: ImageMetadata;
+  certificateImages?: ImageMetadata[];
 }
 
 export const education: EducationItem[] = [
@@ -26,6 +35,7 @@ export const education: EducationItem[] = [
     logo: senatiLogo,
     logoAlt: "Logo de SENATI",
     logoAltEn: "SENATI logo",
+    certificateImages: [senatiIaCertificate],
   },
   {
     title: "Diseño y programación de Base de Datos",
@@ -36,6 +46,10 @@ export const education: EducationItem[] = [
     logo: oracleAcademyLogo,
     logoAlt: "Logo de Oracle Academy",
     logoAltEn: "Oracle Academy logo",
+    certificateImages: [
+      oracleDatabaseDesignCertificate,
+      oracleDatabaseProgrammingCertificate,
+    ],
   },
   {
     title: "Curso Intensivo de Inglés Básico",
@@ -46,6 +60,12 @@ export const education: EducationItem[] = [
     logo: senatiLogo,
     logoAlt: "Logo de Senati Idiomas",
     logoAltEn: "Senati Idiomas logo",
+    certificateImages: [
+      senatiIdiomasCertificate1,
+      senatiIdiomasCertificate2,
+      senatiIdiomasCertificate3,
+      senatiIdiomasCertificate4,
+    ],
   },
   {
     title: "Introducción a la Ingeniería de Software",
@@ -56,15 +76,17 @@ export const education: EducationItem[] = [
     logo: platziLogo,
     logoAlt: "Logo de Platzi",
     logoAltEn: "Platzi logo",
+    certificateImages: [platziCertificate],
   },
   {
-    title: "Curso de Python | Get Connected",
-    titleEn: "Python Course | Get Connected",
+    title: "Get Connected",
+    titleEn: "Get Connected",
     institution: "Cisco Networking Academy",
     institutionEn: "Cisco Networking Academy",
     period: "2022",
     logo: ciscoLogo,
     logoAlt: "Logo de Cisco Networking Academy",
     logoAltEn: "Cisco Networking Academy logo",
+    certificateImages: [ciscoCertificate],
   },
 ];

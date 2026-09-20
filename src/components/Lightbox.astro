@@ -1,5 +1,7 @@
 ---
 import IconClose from "./icons/IconClose.astro";
+import IconChevronLeft from "./icons/IconChevronLeft.astro";
+import IconChevronRight from "./icons/IconChevronRight.astro";
 import { ui } from "../i18n/ui";
 ---
 
@@ -14,22 +16,67 @@ import { ui } from "../i18n/ui";
       {ui.es.lightboxClose}
     </span>
   </button>
-  <img class="lightbox__image" data-lightbox-image alt="" hidden />
-  <div
-    class="lightbox__placeholder"
-    data-lightbox-placeholder
-    hidden
-    aria-hidden="true"
-  >
+
+  <div class="lightbox__viewer">
+    <button
+      class="lightbox__nav lightbox__nav--prev"
+      type="button"
+      data-lightbox-prev
+      hidden
+      aria-label={ui.es.carouselPrev}
+      data-i18n-attrs-es={JSON.stringify({ "aria-label": ui.es.carouselPrev })}
+      data-i18n-attrs-en={JSON.stringify({ "aria-label": ui.en.carouselPrev })}
+    >
+      <IconChevronLeft class="lightbox__nav-icon" />
+    </button>
+
+    <img class="lightbox__image" data-lightbox-image alt="" hidden />
+    <div
+      class="lightbox__placeholder"
+      data-lightbox-placeholder
+      hidden
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="lightbox__spinner"
+      data-lightbox-spinner
+      hidden
+      aria-hidden="true"
+    >
+    </div>
+
+    <button
+      class="lightbox__nav lightbox__nav--next"
+      type="button"
+      data-lightbox-next
+      hidden
+      aria-label={ui.es.carouselNext}
+      data-i18n-attrs-es={JSON.stringify({ "aria-label": ui.es.carouselNext })}
+      data-i18n-attrs-en={JSON.stringify({ "aria-label": ui.en.carouselNext })}
+    >
+      <IconChevronRight class="lightbox__nav-icon" />
+    </button>
   </div>
+
+  <div class="lightbox__dots" data-lightbox-dots hidden></div>
+
   <p class="lightbox__caption" id="lightbox-caption" data-lightbox-caption></p>
 </dialog>
 
 <style>
   .lightbox {
-    width: 90vw;
-    height: 90vh;
-    max-width: 1200px;
+    /* Shrink-wraps to the certificate's own aspect ratio instead of
+     * always claiming a fixed 90vw/90vh box, so a certificate no longer
+     * sits in a mostly-empty frame. fit-content (not auto) is required
+     * here: the UA dialog stylesheet pins all four insets to 0 for
+     * centering, and with those constrained, width/height: auto resolves
+     * to "fill the available space" per the CSS abspos sizing algorithm
+     * rather than "shrink to content". Both dimensions stay capped so it
+     * can never exceed the viewport. */
+    width: fit-content;
+    height: fit-content;
+    max-width: min(90vw, 1200px);
     max-height: 90vh;
     margin: auto;
     padding: var(--space-3);
@@ -80,22 +127,150 @@ import { ui } from "../i18n/ui";
     background: color-mix(in srgb, var(--color-ink) 8%, transparent);
   }
 
-  .lightbox__image {
+  .lightbox__viewer {
+    position: relative;
     flex: 1 1 auto;
-    min-height: 0;
-    width: 100%;
+    /* Baseline so the loading spinner and "no image" placeholder — neither
+     * of which has real content to size against — never collapse down to
+     * nothing and end up crowding the caption below. Once a certificate
+     * loads, the image's own intrinsic size (via max-height below) takes
+     * over and the viewer just follows it. */
+    min-height: min(40vh, 16rem);
+    min-width: 0;
+    display: flex;
+  }
+
+  .lightbox__image {
+    display: block;
+    width: auto;
+    height: auto;
     max-width: 100%;
-    max-height: 100%;
+    /* A direct viewport-relative cap (rather than max-height: 100% of an
+     * auto-height ancestor, which CSS can't resolve) reserves roughly the
+     * space the surrounding chrome needs, so the image — and the dialog
+     * shrink-wrapping around it — never grows past the 90vh dialog cap. */
+    max-height: calc(90vh - 9rem);
+    margin: auto;
     object-fit: contain;
     border-radius: var(--radius-sm);
+    opacity: 0;
+    transition: opacity var(--transition-hover);
+  }
+
+  .lightbox__image.is-visible {
+    opacity: 1;
   }
 
   .lightbox__placeholder {
-    flex: 1 1 auto;
-    min-height: 0;
-    width: 100%;
+    /* Explicit width + aspect-ratio rather than width: 100%: with no image
+     * to size against, the now shrink-wrapping .lightbox__viewer has no
+     * width of its own for a percentage to resolve against. */
+    width: min(60vw, 24rem);
+    aspect-ratio: 4 / 3;
+    margin: auto;
     background: var(--color-placeholder);
     border-radius: var(--radius-sm);
+  }
+
+  .lightbox__spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    transform: translate(-50%, -50%);
+    border: 3px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: lightbox-spin 800ms linear infinite;
+  }
+
+  .lightbox__spinner[hidden] {
+    display: none;
+  }
+
+  @keyframes lightbox-spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  .lightbox__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    transform: translateY(-50%);
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-ink);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-ink) 20%, transparent);
+    transition:
+      transform var(--transition-hover),
+      background-color var(--transition-hover),
+      color var(--transition-hover);
+  }
+
+  .lightbox__nav:hover,
+  .lightbox__nav:focus-visible {
+    background: var(--color-primary);
+    color: var(--color-bg);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .lightbox__nav[hidden] {
+    display: none;
+  }
+
+  .lightbox__nav--prev {
+    left: var(--space-2);
+  }
+
+  .lightbox__nav--next {
+    right: var(--space-2);
+  }
+
+  .lightbox__dots {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    gap: var(--space-1);
+  }
+
+  .lightbox__dots[hidden] {
+    display: none;
+  }
+
+  /* :global() is required here: the dots are created with
+   * document.createElement in the script below, so they never receive
+   * Astro's scoped-CSS class and a plain selector would silently never
+   * match them. */
+  .lightbox__dots :global(.lightbox__dot) {
+    width: 0.5rem;
+    height: 0.5rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-ink) 20%, transparent);
+    transition:
+      background-color var(--transition-hover),
+      transform var(--transition-hover);
+  }
+
+  .lightbox__dots :global(.lightbox__dot:hover),
+  .lightbox__dots :global(.lightbox__dot:focus-visible) {
+    background: color-mix(in srgb, var(--color-primary) 60%, transparent);
+  }
+
+  .lightbox__dots :global(.lightbox__dot[aria-current="true"]) {
+    background: var(--color-primary);
+    transform: scale(1.3);
   }
 
   .lightbox__caption {
@@ -107,6 +282,16 @@ import { ui } from "../i18n/ui";
 </style>
 
 <script>
+  import { ui } from "../i18n/ui";
+
+  type Lang = "es" | "en";
+  interface LightboxImage {
+    src: string;
+    alt: string;
+  }
+
+  const LANG_STORAGE_KEY = "lang";
+
   const dialog = document.querySelector<HTMLDialogElement>("#lightbox");
   const image = dialog?.querySelector<HTMLImageElement>(
     "[data-lightbox-image]",
@@ -118,34 +303,166 @@ import { ui } from "../i18n/ui";
   const closeButton = dialog?.querySelector<HTMLButtonElement>(
     "[data-lightbox-close]",
   );
+  const prevButton = dialog?.querySelector<HTMLButtonElement>(
+    "[data-lightbox-prev]",
+  );
+  const nextButton = dialog?.querySelector<HTMLButtonElement>(
+    "[data-lightbox-next]",
+  );
+  const dotsContainer = dialog?.querySelector<HTMLElement>(
+    "[data-lightbox-dots]",
+  );
+  const spinner = dialog?.querySelector<HTMLElement>("[data-lightbox-spinner]");
 
   const triggers = document.querySelectorAll<HTMLButtonElement>(
     "[data-lightbox-trigger]",
   );
 
+  let images: LightboxImage[] = [];
+  let currentIndex = 0;
+  let loadToken = 0;
+  let spinnerTimer: number | undefined;
+
+  // Cached (already-viewed) images resolve almost instantly — showing the
+  // spinner immediately for those just makes navigation feel like it
+  // flickers. Only reveal it if a load is actually taking a moment.
+  const SPINNER_DELAY_MS = 150;
+
+  const getLang = (): Lang => {
+    try {
+      return localStorage.getItem(LANG_STORAGE_KEY) === "en" ? "en" : "es";
+    } catch {
+      return "es";
+    }
+  };
+
+  const renderDots = () => {
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = "";
+
+    if (images.length <= 1) {
+      dotsContainer.hidden = true;
+      return;
+    }
+
+    dotsContainer.hidden = false;
+    const lang = getLang();
+
+    images.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "lightbox__dot";
+      dot.setAttribute(
+        "aria-label",
+        `${ui[lang].carouselImage} ${i + 1} ${ui[lang].carouselOf} ${images.length}`,
+      );
+      if (i === currentIndex) dot.setAttribute("aria-current", "true");
+      dot.addEventListener("click", () => showImage(i));
+      dotsContainer.append(dot);
+    });
+  };
+
+  const showImage = (index: number) => {
+    if (!images.length || !image) return;
+    currentIndex = (index + images.length) % images.length;
+    const current = images[currentIndex];
+
+    placeholder?.setAttribute("hidden", "");
+    image.hidden = false;
+
+    // The <img> is reused across images/navigations. Rather than an
+    // abrupt hide/show around the load, fade the current pixels out via
+    // opacity — cheap and instant for cached images, since removing the
+    // class here has nothing left to visibly wait on but the fade itself.
+    image.classList.remove("is-visible");
+
+    window.clearTimeout(spinnerTimer);
+    spinner?.setAttribute("hidden", "");
+
+    // A monotonic token (rather than comparing image.src) sidesteps the
+    // browser resolving .src into an absolute URL on read-back, which
+    // would never match the original unresolved string we set it from.
+    const token = ++loadToken;
+
+    spinnerTimer = window.setTimeout(() => {
+      if (token !== loadToken) return;
+      spinner?.removeAttribute("hidden");
+    }, SPINNER_DELAY_MS);
+
+    image.onload = () => {
+      if (token !== loadToken) return; // superseded by a newer navigation
+      window.clearTimeout(spinnerTimer);
+      spinner?.setAttribute("hidden", "");
+      requestAnimationFrame(() => image.classList.add("is-visible"));
+    };
+    image.onerror = () => {
+      if (token !== loadToken) return;
+      window.clearTimeout(spinnerTimer);
+      spinner?.setAttribute("hidden", "");
+    };
+
+    image.alt = current.alt;
+    image.src = current.src;
+
+    dotsContainer
+      ?.querySelectorAll<HTMLButtonElement>(".lightbox__dot")
+      .forEach((dot, i) => {
+        if (i === currentIndex) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+  };
+
+  const updateNavVisibility = () => {
+    const show = images.length > 1;
+    prevButton?.toggleAttribute("hidden", !show);
+    nextButton?.toggleAttribute("hidden", !show);
+  };
+
   triggers.forEach((trigger) => {
     trigger.addEventListener("click", () => {
-      const src = trigger.getAttribute("data-lightbox-src");
-      const alt = trigger.getAttribute("data-lightbox-alt") ?? "";
-      const title = trigger.getAttribute("data-lightbox-title") ?? "";
+      const raw = trigger.getAttribute("data-lightbox-images");
+      try {
+        images = raw ? (JSON.parse(raw) as LightboxImage[]) : [];
+      } catch {
+        images = [];
+      }
+      currentIndex = 0;
 
-      if (src && image) {
-        image.src = src;
-        image.alt = alt;
-        image.hidden = false;
-        placeholder?.setAttribute("hidden", "");
+      const title = trigger.getAttribute("data-lightbox-title") ?? "";
+      if (caption) caption.textContent = title;
+
+      if (images.length) {
+        showImage(0);
       } else {
+        loadToken++; // invalidate any in-flight load from a previous open
+        window.clearTimeout(spinnerTimer);
+        image?.classList.remove("is-visible");
         image?.setAttribute("hidden", "");
+        spinner?.setAttribute("hidden", "");
         placeholder?.removeAttribute("hidden");
       }
 
-      if (caption) caption.textContent = title;
+      renderDots();
+      updateNavVisibility();
       dialog?.showModal();
     });
+  });
+
+  prevButton?.addEventListener("click", () => showImage(currentIndex - 1));
+  nextButton?.addEventListener("click", () => showImage(currentIndex + 1));
+
+  dialog?.addEventListener("keydown", (event) => {
+    if (images.length <= 1) return;
+    if (event.key === "ArrowLeft") showImage(currentIndex - 1);
+    if (event.key === "ArrowRight") showImage(currentIndex + 1);
   });
 
   closeButton?.addEventListener("click", () => dialog?.close());
   dialog?.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
+  });
+
+  document.addEventListener("app:langchange", () => {
+    if (dialog?.open) renderDots();
   });
 </script>

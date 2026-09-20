@@ -1,4 +1,7 @@
 import type { ImageMetadata } from "astro";
+import fragoteHackathon2026 from "../assets/certificates/awards/fragote-hackathon-2026.jpg";
+import fragoteReconocimientoCompromiso2025 from "../assets/certificates/awards/fragote-reconocimiento-compromiso-2025.jpg";
+import senatiCasoExito2025 from "../assets/certificates/awards/senati-caso-exito-2025.jpg";
 
 export interface Award {
   title: string;
@@ -9,7 +12,8 @@ export interface Award {
   description: string;
   descriptionEn: string;
   mediaFirst?: boolean;
-  image?: ImageMetadata;
+  images?: ImageMetadata[];
+  expandable?: boolean;
 }
 
 export const awards: Award[] = [
@@ -23,6 +27,7 @@ export const awards: Award[] = [
       "Obtuve el segundo puesto en la hackathon interna de Fragote Software Factory con el desarrollo de un módulo de transporte académico orientado a optimizar la gestión logística institucional.",
     descriptionEn:
       "Placed second in Fragote Software Factory's internal hackathon, building an academic transportation module aimed at optimizing the institution's logistics management.",
+    images: [fragoteHackathon2026],
   },
   {
     title: "Certificado de reconocimiento al compromiso empresarial",
@@ -35,6 +40,7 @@ export const awards: Award[] = [
     descriptionEn:
       "Recognized for embodying the FraGoTe Spirit, standing out for my attitude, commitment, initiative, and sense of belonging to the organization's values and culture.",
     mediaFirst: true,
+    images: [fragoteReconocimientoCompromiso2025],
   },
   {
     title: "Caso de éxito destacado por SENATI",
@@ -46,5 +52,7 @@ export const awards: Award[] = [
       "Fui reconocido por SENATI como caso de éxito, participando en una entrevista radial para compartir mi experiencia y trayectoria profesional.",
     descriptionEn:
       "Featured by SENATI as a success story, taking part in a radio interview to share my professional experience and career journey.",
+    images: [senatiCasoExito2025],
+    expandable: false,
   },
 ];

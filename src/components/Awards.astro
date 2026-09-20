@@ -21,8 +21,26 @@ import { ui } from "../i18n/ui";
         awards.map((award) => {
           const labelEs = `${ui.es.awardsViewLarger}: ${award.title}`;
           const labelEn = `${ui.en.awardsViewLarger}: ${award.titleEn}`;
-          const altEs = `${ui.es.awardsCertificate}: ${award.title}`;
-          const altEn = `${ui.en.awardsCertificate}: ${award.titleEn}`;
+          const certAltEs = `${ui.es.awardsCertificate}: ${award.title}`;
+          const certAltEn = `${ui.en.awardsCertificate}: ${award.titleEn}`;
+          const images = award.images ?? [];
+          const thumbnail = images[0];
+          const isExpandable = award.expandable !== false;
+
+          const buildImagesJson = (lang: "es" | "en") => {
+            const label =
+              lang === "es" ? ui.es.awardsCertificate : ui.en.awardsCertificate;
+            const awardTitle = lang === "es" ? award.title : award.titleEn;
+            return JSON.stringify(
+              images.map((img, i) => ({
+                src: img.src,
+                alt:
+                  images.length > 1
+                    ? `${label}: ${awardTitle} (${i + 1}/${images.length})`
+                    : `${label}: ${awardTitle}`,
+              })),
+            );
+          };
 
           return (
             <li
@@ -60,40 +78,63 @@ import { ui } from "../i18n/ui";
                 </p>
               </div>
 
-              <button
-                class="awards__media"
-                type="button"
-                data-lightbox-trigger
-                data-lightbox-src={award.image?.src}
-                data-lightbox-alt={altEs}
-                data-lightbox-title={award.title}
-                aria-label={labelEs}
-                data-i18n-attrs-es={JSON.stringify({
-                  "aria-label": labelEs,
-                  "data-lightbox-alt": altEs,
-                  "data-lightbox-title": award.title,
-                })}
-                data-i18n-attrs-en={JSON.stringify({
-                  "aria-label": labelEn,
-                  "data-lightbox-alt": altEn,
-                  "data-lightbox-title": award.titleEn,
-                })}
-              >
-                {award.image ? (
-                  <Image
-                    class="awards__media-image"
-                    src={award.image}
-                    alt=""
-                    width={422}
-                    height={240}
-                  />
-                ) : (
-                  <span class="awards__media-placeholder" aria-hidden="true" />
-                )}
-                <span class="awards__expand" aria-hidden="true">
-                  <IconExpand />
-                </span>
-              </button>
+              {isExpandable ? (
+                <button
+                  class="awards__media"
+                  type="button"
+                  data-lightbox-trigger
+                  data-lightbox-images={buildImagesJson("es")}
+                  data-lightbox-title={award.title}
+                  aria-label={labelEs}
+                  data-i18n-attrs-es={JSON.stringify({
+                    "aria-label": labelEs,
+                    "data-lightbox-images": buildImagesJson("es"),
+                    "data-lightbox-title": award.title,
+                  })}
+                  data-i18n-attrs-en={JSON.stringify({
+                    "aria-label": labelEn,
+                    "data-lightbox-images": buildImagesJson("en"),
+                    "data-lightbox-title": award.titleEn,
+                  })}
+                >
+                  {thumbnail ? (
+                    <Image
+                      class="awards__media-image"
+                      src={thumbnail}
+                      alt=""
+                      width={422}
+                      height={240}
+                    />
+                  ) : (
+                    <span
+                      class="awards__media-placeholder"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span class="awards__expand" aria-hidden="true">
+                    <IconExpand />
+                  </span>
+                </button>
+              ) : (
+                <div class="awards__media awards__media--static">
+                  {thumbnail ? (
+                    <Image
+                      class="awards__media-image"
+                      src={thumbnail}
+                      alt={certAltEs}
+                      width={422}
+                      height={240}
+                      data-i18n-attrs-es={JSON.stringify({ alt: certAltEs })}
+                      data-i18n-attrs-en={JSON.stringify({ alt: certAltEn })}
+                    />
+                  ) : (
+                    <span
+                      class="awards__media-placeholder"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
+              )}
             </li>
           );
         })
@@ -169,6 +210,10 @@ import { ui } from "../i18n/ui";
     border-radius: var(--radius-sm);
     overflow: hidden;
     background: none;
+  }
+
+  .awards__media--static {
+    cursor: default;
   }
 
   .awards__media-image {

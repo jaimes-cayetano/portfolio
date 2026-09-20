@@ -24,8 +24,24 @@ const LOGO_WIDTH = 72;
           const logoHeight = Math.round(
             (item.logo.height / item.logo.width) * LOGO_WIDTH,
           );
-          const altEs = `${ui.es.educationCertificateLabel}: ${item.title}`;
-          const altEn = `${ui.en.educationCertificateLabel}: ${item.titleEn}`;
+          const images = item.certificateImages ?? [];
+
+          const buildImagesJson = (lang: "es" | "en") => {
+            const label =
+              lang === "es"
+                ? ui.es.educationCertificateLabel
+                : ui.en.educationCertificateLabel;
+            const itemTitle = lang === "es" ? item.title : item.titleEn;
+            return JSON.stringify(
+              images.map((img, i) => ({
+                src: img.src,
+                alt:
+                  images.length > 1
+                    ? `${label}: ${itemTitle} (${i + 1}/${images.length})`
+                    : `${label}: ${itemTitle}`,
+              })),
+            );
+          };
 
           return (
             <li class="education__item" data-reveal>
@@ -50,15 +66,14 @@ const LOGO_WIDTH = 72;
                   class="education__link"
                   type="button"
                   data-lightbox-trigger
-                  data-lightbox-src={item.certificateImage?.src}
-                  data-lightbox-alt={altEs}
+                  data-lightbox-images={buildImagesJson("es")}
                   data-lightbox-title={item.title}
                   data-i18n-attrs-es={JSON.stringify({
-                    "data-lightbox-alt": altEs,
+                    "data-lightbox-images": buildImagesJson("es"),
                     "data-lightbox-title": item.title,
                   })}
                   data-i18n-attrs-en={JSON.stringify({
-                    "data-lightbox-alt": altEn,
+                    "data-lightbox-images": buildImagesJson("en"),
                     "data-lightbox-title": item.titleEn,
                   })}
                 >
