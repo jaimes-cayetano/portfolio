@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { profile } from "../data/profile";
 import { ui } from "../i18n/ui";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title: string;
@@ -149,5 +150,6 @@ const personSchema = {
         revealElements.forEach((el) => observer.observe(el));
       }
     </script>
+    <Analytics />
   </body>
 </html>
