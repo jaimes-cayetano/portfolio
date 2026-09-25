@@ -1,7 +1,7 @@
 export const profile = {
   name: "Jhon Jaimes",
   fullName: "Jhon Jaimes Cayetano",
-  role: "Fullstack Developer",
+  role: "Full Stack Developer",
   yearsExperience: "+2 años",
   yearsExperienceEn: "+2 years",
   intro:
