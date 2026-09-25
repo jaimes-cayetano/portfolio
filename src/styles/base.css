@@ -88,17 +88,31 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 1.4375rem;
-  padding: 0 var(--space-1);
-  --badge-color-resolved: color-mix(in srgb,
-      var(--badge-color, var(--color-meta-strong)) calc(100% - var(--badge-lighten)),
-      white var(--badge-lighten));
+  gap: 0.375rem;
+  height: 1.875rem;
+  padding: 0 0.75rem;
+  /* Same color in both themes by default — only a tag that sets its own
+   * --badge-color-dark (data/experience.ts's colorDark, for the couple of
+   * brand colors too dark to read against a dark background) picks a
+   * different value once data-theme="dark" is active. */
+  --badge-color-resolved: var(--badge-color, var(--color-meta-strong));
   border: 1px solid var(--badge-color-resolved);
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--badge-color-resolved) 9%, transparent);
   color: var(--badge-color-resolved);
-  font-size: var(--fs-small);
+  font-size: 0.875rem;
   font-weight: var(--fw-bold);
   white-space: nowrap;
+}
+
+:root[data-theme="dark"] .badge {
+  --badge-color-resolved: var(--badge-color-dark, var(--badge-color, var(--color-meta-strong)));
+}
+
+.badge__icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
 }
 
 [data-reveal].reveal-pending {

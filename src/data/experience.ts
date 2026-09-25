@@ -3,6 +3,14 @@ export interface Tag {
   labelEn: string;
   /** Brand color used for the tag border/text. */
   color: string;
+  /** Overrides `color` only in dark mode — reserved for the couple of
+   * real brand colors too dark to read against a dark background;
+   * everything else intentionally renders identically in both themes. */
+  colorDark?: string;
+  /** Simple Icons slug (see node_modules/simple-icons/icons). Omitted when
+   * no accurate brand icon exists (generic terms, or brands excluded from
+   * Simple Icons for trademark reasons, e.g. OpenAI, AWS). */
+  icon?: string;
 }
 
 export interface Achievement {
@@ -34,11 +42,26 @@ export const experience: ExperienceRole[] = [
         title: "Integración de soluciones de Inteligencia Artificial",
         titleEn: "AI Solutions Integration",
         tags: [
-          { label: "OpenAI", labelEn: "OpenAI", color: "var(--color-ink)" },
-          { label: "Gemini", labelEn: "Gemini", color: "#8e75ff" },
-          { label: "DeepSeek", labelEn: "DeepSeek", color: "#4d6bfe" },
-          { label: "Google Vision API", labelEn: "Google Vision API", color: "#4285f4" },
-          { label: "OCR", labelEn: "OCR", color: "#475569" },
+          {
+            label: "OpenAI",
+            labelEn: "OpenAI",
+            color: "var(--color-ink)",
+            icon: "iconify:openai-icon",
+          },
+          { label: "Gemini", labelEn: "Gemini", color: "#8e75ff", icon: "googlegemini" },
+          { label: "DeepSeek", labelEn: "DeepSeek", color: "#4d6bfe", icon: "deepseek" },
+          {
+            label: "Google Vision API",
+            labelEn: "Google Vision API",
+            color: "#4285f4",
+            icon: "googlecloud",
+          },
+          {
+            label: "OCR",
+            labelEn: "OCR",
+            color: "#475569",
+            colorDark: "#94a3b8",
+          },
         ],
         description:
           "Implementé soluciones de IA para la generación dinámica de contenido y análisis de información mediante búsqueda web, integrando modelos como Gemini, DeepSeek y OpenAI. Desarrollé un dashboard para monitorear el consumo de tokens, contenido generado y solicitudes realizadas, además de realizar pruebas y optimización de prompts para equilibrar la calidad de las respuestas con el consumo de recursos.",
@@ -49,10 +72,15 @@ export const experience: ExperienceRole[] = [
         title: "Arquitectura y escalabilidad de sistemas",
         titleEn: "System Architecture & Scalability",
         tags: [
-          { label: "AWS", labelEn: "AWS", color: "#f90" },
-          { label: "Redis", labelEn: "Redis", color: "#dc382d" },
-          { label: "Cloudflare", labelEn: "Cloudflare", color: "#f38020" },
-          { label: "Claude Code", labelEn: "Claude Code", color: "#d97757" },
+          { label: "AWS", labelEn: "AWS", color: "#f90", icon: "iconify:aws" },
+          { label: "Redis", labelEn: "Redis", color: "#dc382d", icon: "redis" },
+          { label: "Cloudflare", labelEn: "Cloudflare", color: "#f38020", icon: "cloudflare" },
+          {
+            label: "Claude Code",
+            labelEn: "Claude Code",
+            color: "#d97757",
+            icon: "claudecode",
+          },
           { label: "Microservicios", labelEn: "Microservices", color: "#8b5cf6" },
         ],
         description:
@@ -64,15 +92,26 @@ export const experience: ExperienceRole[] = [
         title: "Desarrollo, mantenimiento y soporte de sistemas",
         titleEn: "System Development, Maintenance & Support",
         tags: [
-          { label: "Vue", labelEn: "Vue", color: "#42b883" },
-          { label: "Filament", labelEn: "Filament", color: "#f59e0b" },
-          { label: "Laravel", labelEn: "Laravel", color: "#ff2d20" },
-          { label: "Docker", labelEn: "Docker", color: "#2496ed" },
-          { label: "Symfony", labelEn: "Symfony", color: "var(--color-ink)" },
-          { label: "MySQL", labelEn: "MySQL", color: "#00758f" },
-          { label: "Claude Code", labelEn: "Claude Code", color: "#d97757" },
-          { label: "React", labelEn: "React", color: "#61dafb" },
-          { label: "Prisma", labelEn: "Prisma", color: "#2d3748" },
+          { label: "Vue", labelEn: "Vue", color: "#42b883", icon: "vuedotjs" },
+          { label: "Filament", labelEn: "Filament", color: "#f59e0b", icon: "filament" },
+          { label: "Laravel", labelEn: "Laravel", color: "#ff2d20", icon: "laravel" },
+          { label: "Docker", labelEn: "Docker", color: "#2496ed", icon: "docker" },
+          { label: "Symfony", labelEn: "Symfony", color: "var(--color-ink)", icon: "symfony" },
+          { label: "MySQL", labelEn: "MySQL", color: "#00758f", icon: "mysql" },
+          {
+            label: "Claude Code",
+            labelEn: "Claude Code",
+            color: "#d97757",
+            icon: "claudecode",
+          },
+          { label: "React", labelEn: "React", color: "#61dafb", icon: "react" },
+          {
+            label: "Prisma",
+            labelEn: "Prisma",
+            color: "#2d3748",
+            colorDark: "#94a3b8",
+            icon: "prisma",
+          },
           { label: "Chamilo LMS", labelEn: "Chamilo LMS", color: "#2e7bb4" },
         ],
         description:
@@ -84,10 +123,25 @@ export const experience: ExperienceRole[] = [
         title: "Integración de plataformas de analítica, tracking y publicidad",
         titleEn: "Analytics, Tracking & Advertising Integrations",
         tags: [
-          { label: "TikTok Pixel", labelEn: "TikTok Pixel", color: "var(--color-ink)" },
-          { label: "Meta Pixel", labelEn: "Meta Pixel", color: "#0866ff" },
-          { label: "Google Tag Manager", labelEn: "Google Tag Manager", color: "#246fdb" },
-          { label: "Google Ad Manager", labelEn: "Google Ad Manager", color: "#4285f4" },
+          {
+            label: "TikTok Pixel",
+            labelEn: "TikTok Pixel",
+            color: "var(--color-ink)",
+            icon: "tiktok",
+          },
+          { label: "Meta Pixel", labelEn: "Meta Pixel", color: "#0866ff", icon: "meta" },
+          {
+            label: "Google Tag Manager",
+            labelEn: "Google Tag Manager",
+            color: "#246fdb",
+            icon: "googletagmanager",
+          },
+          {
+            label: "Google Ad Manager",
+            labelEn: "Google Ad Manager",
+            color: "#4285f4",
+            icon: "googleads",
+          },
         ],
         description:
           "Implementé e integré TikTok Pixel, Meta Pixel y Google Tag Manager, configurando y sincronizando eventos para habilitar el seguimiento de métricas y comportamiento dentro de los sistemas, de acuerdo con las plataformas de medición seleccionadas por cada cliente.",
@@ -135,10 +189,10 @@ export const experience: ExperienceRole[] = [
         titleEn: "System Maintenance & Support",
         tags: [
           { label: "Chamilo LMS", labelEn: "Chamilo LMS", color: "#2e7bb4" },
-          { label: "Symfony", labelEn: "Symfony", color: "var(--color-ink)" },
-          { label: "MySQL", labelEn: "MySQL", color: "#00758f" },
-          { label: "Filament", labelEn: "Filament", color: "#f59e0b" },
-          { label: "Laravel", labelEn: "Laravel", color: "#ff2d20" },
+          { label: "Symfony", labelEn: "Symfony", color: "var(--color-ink)", icon: "symfony" },
+          { label: "MySQL", labelEn: "MySQL", color: "#00758f", icon: "mysql" },
+          { label: "Filament", labelEn: "Filament", color: "#f59e0b", icon: "filament" },
+          { label: "Laravel", labelEn: "Laravel", color: "#ff2d20", icon: "laravel" },
         ],
         description:
           "Participé en el mantenimiento y soporte de sistemas, trabajando directamente con el Project Manager y el equipo de desarrollo para analizar requerimientos, resolver incidencias e implementar nuevas soluciones e integraciones.",
@@ -149,12 +203,17 @@ export const experience: ExperienceRole[] = [
         title: "Integración y desarrollo de módulos",
         titleEn: "Module Integration & Development",
         tags: [
-          { label: "Knex", labelEn: "Knex", color: "#1a73e8" },
-          { label: "Firebird", labelEn: "Firebird", color: "#e02b2b" },
-          { label: "Vue", labelEn: "Vue", color: "#42b883" },
-          { label: "Node", labelEn: "Node", color: "#393" },
-          { label: "Laravel", labelEn: "Laravel", color: "#ff2d20" },
-          { label: "Filament", labelEn: "Filament", color: "#f59e0b" },
+          { label: "Knex", labelEn: "Knex", color: "#1a73e8", icon: "knexdotjs" },
+          {
+            label: "Firebird",
+            labelEn: "Firebird",
+            color: "#e02b2b",
+            icon: "devicon:firebird",
+          },
+          { label: "Vue", labelEn: "Vue", color: "#42b883", icon: "vuedotjs" },
+          { label: "Node", labelEn: "Node", color: "#393", icon: "nodedotjs" },
+          { label: "Laravel", labelEn: "Laravel", color: "#ff2d20", icon: "laravel" },
+          { label: "Filament", labelEn: "Filament", color: "#f59e0b", icon: "filament" },
         ],
         description:
           "Integré nuevos módulos en sistemas en producción, aprovechando las funcionalidades y servicios existentes y siguiendo los patrones arquitectónicos y buenas prácticas definidos por cada proyecto para garantizar una integración consistente y mantenible.",

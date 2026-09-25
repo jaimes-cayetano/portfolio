@@ -25,10 +25,6 @@
   --color-github: #000000;
   --color-mail: #ea4335;
 
-  /* Blends dark, low-contrast tag colors (data/experience.ts) toward white
-   * in dark mode only; 0% keeps every tag color exactly as authored. */
-  --badge-lighten: 0%;
-
   /* ---- Typography ---- */
   --font-family-base: "Montserrat", "Segoe UI", system-ui, sans-serif;
 
@@ -110,8 +106,6 @@
   --color-linkedin: #0a66c2;
   --color-github: #e6e6ea;
   --color-mail: #ea4335;
-
-  --badge-lighten: 42%;
 }
 
 /* Distinct, more compact type & spacing scale for small screens instead of

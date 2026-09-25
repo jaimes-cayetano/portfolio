@@ -1,0 +1,73 @@
+---
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+
+interface Props {
+  /**
+   * Simple Icons slug (see node_modules/simple-icons/icons) by default.
+   * Prefix with "iconify:" to pull from the Iconify "logos" collection
+   * instead, or "devicon:" for Devicon's "-plain" icon — used for the
+   * handful of brands Simple Icons excludes for trademark reasons
+   * (OpenAI, AWS) or simply doesn't carry (Firebird).
+   */
+  slug: string;
+  class?: string;
+}
+
+const { slug, class: className } = Astro.props;
+
+let body: string;
+let viewBox: string;
+
+if (slug.startsWith("iconify:")) {
+  const iconifySlug = slug.slice("iconify:".length);
+  const dataFile = fileURLToPath(
+    new URL(
+      "../../../node_modules/@iconify-json/logos/icons.json",
+      import.meta.url,
+    ),
+  );
+  const data = JSON.parse(readFileSync(dataFile, "utf-8"));
+  const icon = data.icons[iconifySlug];
+  const width = icon.width ?? data.width;
+  const height = icon.height ?? data.height;
+  viewBox = `0 0 ${width} ${height}`;
+  // Strips any hardcoded per-path brand colors (several Iconify logos are
+  // multi-tone) so the icon instead takes the badge's own currentColor —
+  // keeps every tech icon rendering the same way regardless of source.
+  body = icon.body.replace(/\sfill="[^"]*"/g, "");
+} else if (slug.startsWith("devicon:")) {
+  const deviconSlug = slug.slice("devicon:".length);
+  const iconFile = fileURLToPath(
+    new URL(
+      `../../../node_modules/devicon/icons/${deviconSlug}/${deviconSlug}-plain.svg`,
+      import.meta.url,
+    ),
+  );
+  const raw = readFileSync(iconFile, "utf-8");
+  const d = raw.match(/<path[^>]*\sd="([^"]+)"/)?.[1] ?? "";
+  viewBox = raw.match(/viewBox="([^"]+)"/)?.[1] ?? "0 0 128 128";
+  body = `<path d="${d}"></path>`;
+} else {
+  const iconFile = fileURLToPath(
+    new URL(
+      `../../../node_modules/simple-icons/icons/${slug}.svg`,
+      import.meta.url,
+    ),
+  );
+  const raw = readFileSync(iconFile, "utf-8");
+  const d = raw.match(/<path d="([^"]+)"/)?.[1] ?? "";
+  viewBox = "0 0 24 24";
+  body = `<path d="${d}"></path>`;
+}
+---
+
+<svg
+  class={className}
+  viewBox={viewBox}
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  xmlns="http://www.w3.org/2000/svg"
+  set:html={body}
+/>

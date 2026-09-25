@@ -1,9 +1,16 @@
 ---
 import { experience } from "../data/experience";
 import IconChevron from "./icons/IconChevron.astro";
+import TechIcon from "./icons/TechIcon.astro";
 import { ui } from "../i18n/ui";
+import type { Tag } from "../data/experience";
 
 const VISIBLE_COUNT = 3;
+
+const badgeStyle = (tag: Tag) =>
+  tag.colorDark
+    ? `--badge-color: ${tag.color}; --badge-color-dark: ${tag.colorDark}`
+    : `--badge-color: ${tag.color}`;
 ---
 
 <section class="experience" id="experiencia" aria-labelledby="experience-title">
@@ -59,13 +66,16 @@ const VISIBLE_COUNT = 3;
                     </h4>
                     <ul class="experience__tags">
                       {achievement.tags.map((tag) => (
-                        <li
-                          class="badge"
-                          style={`--badge-color: ${tag.color}`}
-                          data-i18n-es={tag.label}
-                          data-i18n-en={tag.labelEn}
-                        >
-                          {tag.label}
+                        <li class="badge" style={badgeStyle(tag)}>
+                          {tag.icon && (
+                            <TechIcon slug={tag.icon} class="badge__icon" />
+                          )}
+                          <span
+                            data-i18n-es={tag.label}
+                            data-i18n-en={tag.labelEn}
+                          >
+                            {tag.label}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -93,13 +103,19 @@ const VISIBLE_COUNT = 3;
                           </h4>
                           <ul class="experience__tags">
                             {achievement.tags.map((tag) => (
-                              <li
-                                class="badge"
-                                style={`--badge-color: ${tag.color}`}
-                                data-i18n-es={tag.label}
-                                data-i18n-en={tag.labelEn}
-                              >
-                                {tag.label}
+                              <li class="badge" style={badgeStyle(tag)}>
+                                {tag.icon && (
+                                  <TechIcon
+                                    slug={tag.icon}
+                                    class="badge__icon"
+                                  />
+                                )}
+                                <span
+                                  data-i18n-es={tag.label}
+                                  data-i18n-en={tag.labelEn}
+                                >
+                                  {tag.label}
+                                </span>
                               </li>
                             ))}
                           </ul>
