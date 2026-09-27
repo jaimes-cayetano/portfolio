@@ -3,11 +3,17 @@ import { navLinks } from "../data/nav";
 import ThemeToggle from "./ThemeToggle.astro";
 import LangToggle from "./LangToggle.astro";
 import { ui } from "../i18n/ui";
+import { profile } from "../data/profile";
+import LogoLight from "../assets/brand/jhonjaimes-logo.svg";
+import LogoDark from "../assets/brand/jhonjaimes-logo-dark.svg";
 ---
 
 <header class="header">
   <div class="container header__inner">
-    <a class="header__brand" href="#sobre-mi">JJ</a>
+    <a class="header__brand" href="#sobre-mi" aria-label={profile.fullName}>
+      <LogoLight class="header__logo header__logo--light" aria-hidden="true" />
+      <LogoDark class="header__logo header__logo--dark" aria-hidden="true" />
+    </a>
 
     <nav
       class="header__nav"
@@ -92,9 +98,30 @@ import { ui } from "../i18n/ui";
   .header__brand {
     grid-column: 1;
     justify-self: start;
-    font-weight: var(--fw-bold);
-    font-size: 1.25rem;
-    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    color: var(--color-ink);
+  }
+
+  .header__logo {
+    display: block;
+    width: auto;
+    height: 2.5rem;
+  }
+
+  /* The dark variant is a different drawing (outlined for contrast on dark
+   * backgrounds), not just a recolor, so the two are swapped rather than
+   * sharing one SVG with a themed fill. */
+  .header__logo--dark {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .header__logo--light {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .header__logo--dark {
+    display: block;
   }
 
   .header__nav {
