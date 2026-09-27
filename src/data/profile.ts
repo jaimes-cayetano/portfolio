@@ -1,7 +1,7 @@
 export const profile = {
   name: "Jhon Jaimes",
   fullName: "Jhon Jaimes Cayetano",
-  role: "Full Stack Developer",
+  role: "Software Engineer | Full Stack Developer | AI Solutions Developer",
   yearsExperience: "+2 años",
   yearsExperienceEn: "+2 years",
   intro:
@@ -10,7 +10,7 @@ export const profile = {
     "of experience building technology solutions for organizations across a range of industries — understanding their challenges and turning them into opportunities that drive more value and better outcomes",
   email: "jaimescayetanoj@gmail.com",
   links: {
-    resume: "#",
+    resume: "/cv/jhon-jaimes-cayetano-cv.pdf",
     linkedin: "https://www.linkedin.com/in/jaimes-cayetano/",
     github: "https://github.com/jaimes-cayetano",
   },
